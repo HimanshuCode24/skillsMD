@@ -12,6 +12,7 @@ export async function getSkills(filters?: { category?: string; difficulty?: stri
   let query = supabase
     .from("skills")
     .select("*, users(name, github_url)")
+    .eq("status", "approved")
     .order("upvotes", { ascending: false })
     .order("created_at", { ascending: false });
 
@@ -43,6 +44,7 @@ export async function getSkill(id: string) {
     .from("skills")
     .select("*, users(name, github_url)")
     .eq("id", id)
+    .eq("status", "approved")
     .single();
 
   if (error) {
@@ -60,4 +62,3 @@ function filterSkills(skills: Skill[], filters?: { category?: string; difficulty
     return true;
   });
 }
-

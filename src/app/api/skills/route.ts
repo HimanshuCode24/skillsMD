@@ -1,17 +1,24 @@
 import { NextResponse } from "next/server";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getSupabaseAdminClient } from "@/lib/supabase";
-import { difficulties } from "@/lib/sample-data";
-import type { SkillInput } from "@/lib/types";
+import { skillSubmissionSchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as SkillInput;
+  const ip = getClientIp(request);
+  const limit = rateLimit(`submit:${ip}`, { limit: 5, windowMs: 60 * 60 * 1000 });
 
-  if (!body.title?.trim() || !body.description?.trim() || !body.skill_md?.trim()) {
-    return NextResponse.json({ error: "Title, description, and SKILL.md are required." }, { status: 400 });
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter ?? 3600) } }
+    );
   }
 
-  if (!difficulties.includes(body.difficulty)) {
-    return NextResponse.json({ error: "Invalid difficulty." }, { status: 400 });
+  const json = await request.json().catch(() => null);
+  const parsed = skillSubmissionSchema.safeParse(json);
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid skill submission.", issues: parsed.error.flatten() }, { status: 400 });
   }
 
   const supabase = getSupabaseAdminClient();
@@ -19,20 +26,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Supabase service role key is required for submissions." }, { status: 503 });
   }
 
+  const body = parsed.data;
   const { error } = await supabase.from("skills").insert({
-    title: body.title.trim(),
-    description: body.description.trim(),
-    skill_md: body.skill_md.trim(),
+    title: body.title,
+    description: body.description,
+    skill_md: body.skill_md,
     tags: body.tags,
     category: body.category,
     difficulty: body.difficulty,
-    creator_id: null
+    creator_id: null,
+    status: "pending"
   });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, status: "pending" });
 }
-

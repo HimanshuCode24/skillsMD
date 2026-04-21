@@ -1,13 +1,29 @@
 import { NextResponse } from "next/server";
+import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getSupabaseAdminClient } from "@/lib/supabase";
 
-export async function POST(_: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const ip = getClientIp(request);
+  const limit = rateLimit(`upvote:${ip}:${params.id}`, { limit: 1, windowMs: 24 * 60 * 60 * 1000 });
+
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "You have already upvoted this skill recently." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter ?? 86400) } }
+    );
+  }
+
   const supabase = getSupabaseAdminClient();
   if (!supabase) {
     return NextResponse.json({ error: "Supabase service role key is required for upvotes." }, { status: 503 });
   }
 
-  const { data, error: fetchError } = await supabase.from("skills").select("upvotes").eq("id", params.id).single();
+  const { data, error: fetchError } = await supabase
+    .from("skills")
+    .select("upvotes")
+    .eq("id", params.id)
+    .eq("status", "approved")
+    .single();
   if (fetchError) {
     return NextResponse.json({ error: fetchError.message }, { status: 404 });
   }
@@ -25,4 +41,3 @@ export async function POST(_: Request, { params }: { params: { id: string } }) {
 
   return NextResponse.json({ upvotes: updated.upvotes });
 }
-

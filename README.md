@@ -36,3 +36,13 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 The app can browse sample data without env vars. Submissions and upvotes require Supabase env vars.
 
+## Production Readiness
+
+Before launching publicly, read:
+
+- `docs/ENVIRONMENT.md`
+- `docs/DEPLOYMENT.md`
+- `docs/QA_CHECKLIST.md`
+- `docs/PRODUCTION_READINESS.md`
+
+Submitted skills default to `pending` and public pages only show `approved` skills. The MVP includes in-memory rate limiting for local/single-instance deployments; replace it with Redis-backed rate limiting before meaningful traffic.

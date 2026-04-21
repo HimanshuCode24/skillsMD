@@ -3,7 +3,7 @@ insert into public.users (id, name, github_url) values
   ('00000000-0000-0000-0000-000000000002', 'Jon Bell', null)
 on conflict (id) do nothing;
 
-insert into public.skills (title, description, skill_md, tags, category, difficulty, creator_id, upvotes) values
+insert into public.skills (title, description, skill_md, tags, category, difficulty, creator_id, status, upvotes) values
 (
   'Literature Review Scout',
   'Finds, compares, and summarizes research papers into a structured evidence brief.',
@@ -21,6 +21,7 @@ Use this skill to turn a research question into a concise evidence brief.
   'Research',
   'Intermediate',
   '00000000-0000-0000-0000-000000000001',
+  'approved',
   142
 ),
 (
@@ -40,6 +41,7 @@ Use this skill when integrating an external API.
   'Engineering',
   'Advanced',
   '00000000-0000-0000-0000-000000000002',
+  'approved',
   98
 ),
 (
@@ -61,6 +63,6 @@ Lead with findings. Include file references. Keep tone constructive.',
   'Engineering',
   'Intermediate',
   null,
+  'approved',
   165
 );
-

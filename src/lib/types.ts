@@ -16,6 +16,7 @@ export type Skill = {
   category: string;
   difficulty: Difficulty;
   creator_id: string | null;
+  status?: "pending" | "approved" | "rejected";
   upvotes: number;
   created_at: string;
   users?: Pick<UserProfile, "name" | "github_url"> | null;
@@ -29,4 +30,3 @@ export type SkillInput = {
   category: string;
   difficulty: Difficulty;
 };
-
