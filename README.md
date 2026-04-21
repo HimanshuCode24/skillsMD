@@ -1,50 +1,64 @@
 # Claude Skills Directory
 
-A production-ready MVP for discovering, copying, downloading, and submitting reusable Claude AI skills stored as `SKILL.md` files.
+A production-ready MVP for discovering, previewing, and submitting reusable Claude `SKILL.md` workflows.
+
+## Stack
+
+- Next.js 14 App Router
+- TypeScript
+- Tailwind CSS
+- ShadCN-style UI primitives
+- Supabase for persistence
+- Stripe payment-link ready pricing page
+
+## Getting started
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy the environment template:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Add your Supabase project credentials to `.env.local`.
+
+4. Optional: add Stripe payment links for the paid plans:
+
+```bash
+NEXT_PUBLIC_STRIPE_SKILL_CHECKOUT_BASE_URL=https://buy.stripe.com/...
+NEXT_PUBLIC_STRIPE_SKILL_PACK_URL=https://buy.stripe.com/...
+NEXT_PUBLIC_STRIPE_CREATOR_PRO_URL=https://buy.stripe.com/...
+NEXT_PUBLIC_STRIPE_TEAM_URL=https://buy.stripe.com/...
+```
+
+5. Run the SQL in [`supabase/migrations/202604150001_init.sql`](./supabase/migrations/202604150001_init.sql) in your Supabase project.
+
+6. Start the app:
+
+```bash
+npm run dev
+```
 
 ## Features
 
 - Landing page with trending skills
-- Skills directory with category and difficulty filters
-- Skill detail pages with copy/download actions
-- Submit form for new `SKILL.md` entries
-- Supabase database integration with sample-data fallback
-- Basic upvote endpoint and UI
-- Minimal ShadCN-style component system built with Tailwind CSS
+- Browseable skill directory with category and difficulty filters
+- Skill detail page with copy and download actions
+- Submit form for adding new skills
+- Basic upvote endpoint
+- Premium skills with public previews
+- Creator dashboard with monetization metrics
+- Split pricing flows for premium skill buyers and creators
+- GitHub sign-in ready header controls via Supabase auth
+- Empty state and loading state support
 
-## Quick Start
+## Notes
 
-```bash
-npm install
-npm run dev
-```
-
-Open `http://localhost:3000`.
-
-## Supabase Setup
-
-1. Create a Supabase project.
-2. Run `supabase/schema.sql` in the SQL editor.
-3. Run `supabase/seed.sql` to preload examples.
-4. Copy `.env.example` to `.env.local` and fill in your values.
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-ADMIN_SECRET=your-long-random-admin-secret
-```
-
-The app can browse sample data without env vars. Submissions and upvotes require Supabase env vars.
-Moderation is available at `/admin` when `ADMIN_SECRET` is configured.
-
-## Production Readiness
-
-Before launching publicly, read:
-
-- `docs/ENVIRONMENT.md`
-- `docs/DEPLOYMENT.md`
-- `docs/QA_CHECKLIST.md`
-- `docs/PRODUCTION_READINESS.md`
-
-Submitted skills default to `pending` and public pages only show `approved` skills. The MVP includes in-memory rate limiting for local/single-instance deployments; replace it with Redis-backed rate limiting before meaningful traffic.
+- The UI falls back to local sample data when Supabase environment variables are not configured, so the app is still previewable.
+- New submissions and persistent upvotes require a connected Supabase project.
+- Pricing CTAs can point directly to Stripe Payment Links through environment variables.
