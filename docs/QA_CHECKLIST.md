@@ -22,6 +22,10 @@ Run this checklist before any production launch.
 - Download button downloads a `.md` file
 - Submit form validates required fields
 - Submit form handles Supabase write errors gracefully
+- Submitted skill appears in `/admin` as pending
+- Admin can approve a pending skill
+- Approved skill appears in `/skills`
+- Admin can reject an invalid skill
 - Upvote button increments once and recovers on failure
 
 ## Slow and Failure States
@@ -37,4 +41,3 @@ Run this checklist before any production launch.
 - Submit textarea is usable on small screens
 - Navigation does not overflow
 - Buttons remain tappable
-

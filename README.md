@@ -32,9 +32,11 @@ Open `http://localhost:3000`.
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+ADMIN_SECRET=your-long-random-admin-secret
 ```
 
 The app can browse sample data without env vars. Submissions and upvotes require Supabase env vars.
+Moderation is available at `/admin` when `ADMIN_SECRET` is configured.
 
 ## Production Readiness
 

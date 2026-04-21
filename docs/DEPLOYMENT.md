@@ -21,11 +21,11 @@ Use separate Supabase projects for staging and production.
 3. Run `supabase/seed.sql` in staging only, unless seed examples are wanted in production.
 4. Configure all variables from `docs/ENVIRONMENT.md` in Vercel.
 5. Deploy staging and complete `docs/QA_CHECKLIST.md`.
-6. Enable uptime monitoring for `/` and `/skills`.
-7. Confirm Supabase backups are enabled.
-8. Promote to production only after staging passes.
+6. Visit `/admin`, enter `ADMIN_SECRET`, and approve at least one test skill in staging.
+7. Enable uptime monitoring for `/` and `/skills`.
+8. Confirm Supabase backups are enabled.
+9. Promote to production only after staging passes.
 
 ## Rollback
 
 Keep production deploys tied to Git commits. If a deploy fails, roll back to the previous Vercel deployment and review Supabase logs before retrying.
-

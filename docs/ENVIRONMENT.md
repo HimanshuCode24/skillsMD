@@ -18,6 +18,10 @@ The public anonymous API key. This can be exposed to the browser because row-lev
 
 Server-only key used by API routes to create submitted skills and process upvotes. Never expose this value to the browser.
 
+`ADMIN_SECRET`
+
+Server-side secret required to access moderation API routes. Use a long random value and share it only through the team password manager.
+
 ## Recommended before launch
 
 `NEXT_PUBLIC_APP_URL`
@@ -31,4 +35,3 @@ Error monitoring DSN. Add before launch so server and client failures are visibl
 `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
 
 Recommended replacement for the MVP in-memory rate limiter when running more than one serverless instance.
-
