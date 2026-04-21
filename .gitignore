@@ -1,9 +1,7 @@
-node_modules
 .next
-out
+.next-*
+node_modules
+.env.local
 dist
-.env
-.env*.local
-*.tsbuildinfo
-next-env.d.ts
-
+tsconfig.tsbuildinfo
+supabase/.temp
